@@ -1,0 +1,50 @@
+﻿@page "/"
+
+<h1>Welcome to MAUI Blazor!</h1>
+
+
+
+<button class="btn btn-primary" @onclick="BtnCounter_Clicked">Click me</button>
+<p role="status">@counterClickInfo</p>
+
+<p>Counter storage path: @counterFilePath</p>
+
+
+@code{
+
+
+    public Index()
+    {
+        RefreshCounterInfo();
+    }
+
+    private string counterClickInfo = "";
+    private string counterFilePath = FileSystem.AppDataDirectory + @"\info.txt";
+
+    private void BtnCounter_Clicked()
+    {
+        IncreaseAndSaveCounterInfo();
+        RefreshCounterInfo();
+    }
+
+    private void IncreaseAndSaveCounterInfo()
+    {
+        //Write counter info to Textfile
+        int nrOfClicks = 0;
+        if (System.IO.File.Exists(counterFilePath))
+            nrOfClicks = Convert.ToInt32(System.IO.File.ReadAllText(counterFilePath));
+        nrOfClicks++;
+        System.IO.File.WriteAllText(counterFilePath, nrOfClicks.ToString());
+    }
+
+    private void RefreshCounterInfo()
+    {
+        int nrOfClicks = 0;
+        if (System.IO.File.Exists(counterFilePath))
+            nrOfClicks = Convert.ToInt32(System.IO.File.ReadAllText(counterFilePath));
+
+        counterClickInfo = $"Nr of clicks: {nrOfClicks}";
+
+    }
+
+}
